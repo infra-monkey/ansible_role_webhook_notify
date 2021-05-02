@@ -1,2 +1,18 @@
 ---
+- name: "Include os specific variables"
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- name: "Ensure dependencies are installed"
+  ansible.builtin.package:
+    name: "{{ deplist }}"
+    state: present
+  when: deplist is defined
+
+- name: "Copy the notification script"
+  ansible.builtin.template:
+    src: webhook-notify.sh.j2
+    dest: /usr/local/bin/webhook-notify.sh
+    owner: root
+    group: root
+    mode: '0755'
 ...

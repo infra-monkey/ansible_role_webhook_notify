@@ -1,0 +1,20 @@
+#!/bin/bash
+
+## Values received by this script:
+# To = $1 (Webhook URL )
+# Message = $2 (whatever message to display)
+
+WEBHOOK_TYPE={{ webhook_notify_type }}
+# Rocket.Chat incoming web-hook URL and user name
+WEBHOOK_URL="$1"
+WEBHOOK_TEXT="$2"
+
+# Build our JSON payload and send it as a POST request to the Rocketchat incoming web-hook URL
+WEBHOOK_PAYLOAD='{"text":"'${WEBHOOK_TEXT}'"}'
+
+# Send Payload to the Rocket.Chat Server
+curl -X POST -H 'Content-Type: application/json' --data "${WEBHOOK_PAYLOAD}" ${WEBHOOK_URL}
+
+# Write errors to log
+echo "curl -X POST -H 'Content-Type: application/json' --data "${WEBHOOK_PAYLOAD}" ${WEBHOOK_URL}"
+
