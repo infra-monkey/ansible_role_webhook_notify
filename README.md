@@ -1,12 +1,14 @@
 # Overview
-This role does description.
+This role installs a webhook notification script at `/usr/local/bin/webhook-notify.sh`
 This role requires root permissions. It must be called as root. This needs to be managed at the ansible or playbook level.
+
+
 
 # Variables
 
 | Name  | Type | Required | Default Value | Description |
 | ----- | ---- | -------- | ------------- | ----------- |
-| var | type | no | n.a. | description |
+| webhook_notify_type | string | no | `rocketchat` | The target service of the webhook |
 
 # Automatique Testing
 
