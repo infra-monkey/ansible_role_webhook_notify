@@ -9,6 +9,8 @@ This role requires root permissions. It must be called as root. This needs to be
 | Name  | Type | Required | Default Value | Description |
 | ----- | ---- | -------- | ------------- | ----------- |
 | webhook_notify_type | string | no | `rocketchat` | The target service of the webhook |
+| webhook_notify_alternate_dns.enabled | boolean | no | `false` | Use an alternate dns server. Useful when used to notify dns service status. |
+| webhook_notify_alternate_dns.nameserver | string | no | `1.1.1.1` | The nameserver to use to query the hostname ip. |
 
 # Automatique Testing
 
