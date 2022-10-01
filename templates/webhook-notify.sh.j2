@@ -8,6 +8,8 @@ WEBHOOK_TYPE={{ webhook_notify_type }}
 # Rocket.Chat incoming web-hook URL and user name
 WEBHOOK_URL="$1"
 WEBHOOK_TEXT="$2"
+ALTERNATE_DNS_ENABLED={{ webhook_notify_alternate_dns.enabled }}
+ALTERNATE_NAMESERVER={{ webhook_notify_alternate_dns.nameserver }}
 
 # Build our JSON payload and send it as a POST request to the Rocketchat incoming web-hook URL
 WEBHOOK_PAYLOAD='{"text":"'${WEBHOOK_TEXT}'"}'
@@ -16,5 +18,5 @@ WEBHOOK_PAYLOAD='{"text":"'${WEBHOOK_TEXT}'"}'
 curl -X POST -H 'Content-Type: application/json' --data "${WEBHOOK_PAYLOAD}" ${WEBHOOK_URL}
 
 # Write errors to log
-echo "curl -X POST -H 'Content-Type: application/json' --data "${WEBHOOK_PAYLOAD}" ${WEBHOOK_URL}"
+#echo "curl -X POST -H 'Content-Type: application/json' --data "${WEBHOOK_PAYLOAD}" ${WEBHOOK_URL}"
 
