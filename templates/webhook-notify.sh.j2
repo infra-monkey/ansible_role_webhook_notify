@@ -15,13 +15,15 @@ ALTERNATE_NAMESERVER={{ webhook_notify_alternate_dns.nameserver }}
 
 if [ "${ALTERNATE_DNS_ENABLED}" == "True" ] ; then
     WEBHOOK_IP="$(dig +short @${ALTERNATE_NAMESERVER} ${WEBHOOK_HOSTNAME} | tail -1)"
-    WEBHOOK_URL="-H 'Host: ${WEBHOOK_HOSTNAME}' 'https://${WEBHOOK_IP}/${WEBHOOK_URI}'"
+    WEBHOOK_URL="https://${WEBHOOK_IP}/${WEBHOOK_URI}"
+    WEBHOOK_OPTIONS="-k --header \"Content-Type: application/json\" --header \"Host: ${WEBHOOK_HOSTNAME}\""
 else
     WEBHOOK_URL="https://${WEBHOOK_HOSTNAME}/${WEBHOOK_URI}"
+    WEBHOOK_OPTIONS="--header \"Content-Type: application/json\""
 fi
 
 # Build our JSON payload and send it as a POST request to the Rocketchat incoming web-hook URL
-WEBHOOK_PAYLOAD='{"text":"'${WEBHOOK_TEXT}'"}'
+WEBHOOK_PAYLOAD="{\"text\": \"${WEBHOOK_TEXT}\"}"
 
 # Send Payload to the Rocket.Chat Server
-curl -X POST -H 'Content-Type: application/json' --data "${WEBHOOK_PAYLOAD}" ${WEBHOOK_URL}
+bash -c "curl -v ${WEBHOOK_OPTIONS} --data '${WEBHOOK_PAYLOAD}' ${WEBHOOK_URL}"
