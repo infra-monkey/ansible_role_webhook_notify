@@ -1,20 +1,27 @@
 #!/bin/bash
 
 ## Values received by this script:
-# To = $1 (Webhook URL )
-# Message = $2 (whatever message to display)
+# Destination = $1 (Webhook Hostname )
+# Destination = $2 (Webhook URI )
+# Message = $3 (whatever message to display)
 
 WEBHOOK_TYPE={{ webhook_notify_type }}
 # Rocket.Chat incoming web-hook URL and user name
-WEBHOOK_URL="$1"
-WEBHOOK_TEXT="$2"
+WEBHOOK_HOSTNAME="$1"
+WEBHOOK_URI="$2"
+WEBHOOK_TEXT="$3"
+ALTERNATE_DNS_ENABLED={{ webhook_notify_alternate_dns.enabled }}
+ALTERNATE_NAMESERVER={{ webhook_notify_alternate_dns.nameserver }}
+
+if [ "${ALTERNATE_DNS_ENABLED}" == "True" ] ; then
+    WEBHOOK_IP="$(dig +short @${ALTERNATE_NAMESERVER} ${WEBHOOK_HOSTNAME} | tail -1)"
+    WEBHOOK_URL="-H 'Host: ${WEBHOOK_HOSTNAME}' 'https://${WEBHOOK_IP}/${WEBHOOK_URI}'"
+else
+    WEBHOOK_URL="https://${WEBHOOK_HOSTNAME}/${WEBHOOK_URI}"
+fi
 
 # Build our JSON payload and send it as a POST request to the Rocketchat incoming web-hook URL
 WEBHOOK_PAYLOAD='{"text":"'${WEBHOOK_TEXT}'"}'
 
 # Send Payload to the Rocket.Chat Server
 curl -X POST -H 'Content-Type: application/json' --data "${WEBHOOK_PAYLOAD}" ${WEBHOOK_URL}
-
-# Write errors to log
-echo "curl -X POST -H 'Content-Type: application/json' --data "${WEBHOOK_PAYLOAD}" ${WEBHOOK_URL}"
-
