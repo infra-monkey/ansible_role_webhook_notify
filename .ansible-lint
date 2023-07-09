@@ -13,5 +13,5 @@ exclude_paths:
   - ./.github
   - ./requirements.yml
 
-skip_list:
-  - package-latest
+# skip_list:
+#   - package-latest
